@@ -43,9 +43,9 @@ impl Plugin for PGAnimsPlugin {
         })
         .add_event::<AnimStartEvent>()
         .add_event::<AnimEndEvent>()
+        .add_systems(Update, init_graphs.run_if(any_with_component::<AnimGraphInit>))
         .add_systems(Update, (
             (   
-                init_graphs.run_if(any_with_component::<AnimGraphInit>),
                 attach_animation_graphs, 
                 update_animatable
             ).before(animate_targets),
