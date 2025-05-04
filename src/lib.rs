@@ -52,8 +52,6 @@ impl Plugin for PGAnimsPlugin {
             update_animation
         ).in_set(PGAnimsSet::Anims))
         .add_systems(PostUpdate, play_next_animation_after_finished)
-        // .add_observer(anim_start)    
-        // .add_observer(anim_end)
         ;
     }
 }
@@ -265,39 +263,6 @@ fn play_next_animation_after_finished(
         }
     }
 }
-
-
-
-/* 
-// Example observer implementations
-fn anim_start(
-    trigger:        Trigger<AnimStartEvent>,
-    mut commands:   Commands,
-    parents:        Query<&ChildOf>
-){
-
-    for ancestor in parents.iter_ancestors(trigger.target()){
-        match trigger.anim {
-            _ => {}
-        }
-    }
-}
-
-
-fn anim_end(
-    trigger:        Trigger<AnimEndEvent>,
-    mut commands:   Commands,
-    parents:        Query<&ChildOf>
-){
-    for ancestor in parents.iter_ancestors(trigger.target()){
-        // if let Ok(mut state) = combats.get_mut(ancestor){
-        //     match trigger.anim {
-        //         _ => {}
-        //     }
-        // }
-    }
-}
-*/
 
 #[derive(Resource, Reflect)]
 pub struct PGAnimGraph {
