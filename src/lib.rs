@@ -4,9 +4,19 @@ use bevy::animation::{animate_targets, AnimationTargetId};
 
 
 pub struct PGAnimsPlugin {
-    anims_with_start_event: Vec<usize>,
-    anims_with_end_event: Vec<usize>,
-    targets_masks_mapping: Vec<(String, Vec<u32>)>
+    pub anims_with_start_event: Vec<usize>,
+    pub anims_with_end_event: Vec<usize>,
+    pub targets_masks_mapping: Vec<(String, Vec<u32>)>
+}
+
+impl Default for PGAnimsPlugin{
+    fn default() -> Self {
+        PGAnimsPlugin {
+            anims_with_start_event: Vec::new(), 
+            anims_with_end_event: Vec::new(), 
+            targets_masks_mapping: Vec::new()
+        }
+    }
 }
 
 
@@ -24,7 +34,7 @@ impl Plugin for PGAnimsPlugin {
         .register_type::<PlayerGraph>()
         .register_type::<Anim>()
         .register_type::<AnimsConf>()
-        .register_type::<Animatable>()
+        .register_type::<PGAnimatable>()
         .insert_resource(AnimsPluginConfig {
             anims_with_start_event: self.anims_with_start_event.clone(),
             anims_with_end_event:   self.anims_with_end_event.clone(),
@@ -57,7 +67,7 @@ fn attach_animation_graphs(
     player_graph:       Res<PlayerGraph>,
     mut graphs:         ResMut<Assets<AnimationGraph>>,
     mut clips:          ResMut<Assets<AnimationClip>>,
-    armatures:          Query<Entity, (Added<AnimationPlayer>, Without<Animatable>)>,
+    armatures:          Query<Entity, (Added<AnimationPlayer>, Without<PGAnimatable>)>,
     mut added_events:   Local<AnimsPostprocessDone>,
     anims_config:       Res<AnimsPluginConfig>
 ){
@@ -99,7 +109,7 @@ fn update_animatable(
     mut commands:   Commands,
     armatures:      Query<Entity, Added<AnimationGraphHandle>>,
     parents:        Query<&ChildOf>,
-    animatables:    Query<&Animatable>
+    animatables:    Query<&PGAnimatable>
 ){
 
     for entity in armatures.iter(){
@@ -114,7 +124,7 @@ fn update_animatable(
         }
         commands.entity(animatable_entity).insert(
             (
-                Animatable{armature: entity, default_anim},
+                PGAnimatable{armature: entity, default_anim},
                 Anim::new(default_anim)
             )
         );
@@ -147,7 +157,7 @@ impl Default for AnimsPostprocessDone {
 fn update_animation(
     player_graph:     Res<PlayerGraph>,
     mut graphs:       ResMut<Assets<AnimationGraph>>,
-    mut animatables:  Query<(&Animatable, &mut Anim), Changed<Anim>>,
+    mut animatables:  Query<(&PGAnimatable, &mut Anim), Changed<Anim>>,
     mut players:      Query<(Entity, &mut AnimationPlayer)>
 ){
     for (animatable, anim) in animatables.iter_mut(){
@@ -195,7 +205,7 @@ fn update_animation(
 
 fn play_next_animation_after_finished(
     changed_players:      Query<(Entity, &AnimationPlayer), Changed<AnimationPlayer>>,
-    mut animatables:      Query<(&Animatable, &mut Anim)>
+    mut animatables:      Query<(&PGAnimatable, &mut Anim)>
 ){
     for (entity, player) in changed_players.iter(){
         if player.all_finished(){
@@ -269,13 +279,13 @@ pub struct AnimEndEvent {
 
 #[derive(Component, Reflect, Debug)]
 #[reflect(Component)]
-pub struct Animatable {
+pub struct PGAnimatable {
     pub armature: Entity,
     pub default_anim: usize
 }
-impl Animatable {
+impl PGAnimatable {
     pub fn new(default_anim: usize) -> Self {
-        Animatable{
+        PGAnimatable{
             armature: Entity::PLACEHOLDER, 
             default_anim
         }
@@ -393,7 +403,7 @@ pub mod prelude {
         PGAnimsSet,
         AnimStartEvent, 
         AnimEndEvent,
-        Animatable,
+        PGAnimatable,
         AnimsConf,
         Anims,
         Anim
