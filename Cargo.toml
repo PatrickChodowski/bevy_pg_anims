@@ -1,0 +1,10 @@
+[package]
+name = "bevy_pg_anims"
+version = "1.0.16"
+edition = "2021"
+description = "PG (PatchGames) Animations interface to be used with Bevy"
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+bevy = {version = "0.16.0", default-features = false, features = ["animation", "bevy_asset"]}
+
