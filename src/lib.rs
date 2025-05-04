@@ -92,7 +92,7 @@ fn init_graphs(
 #[derive(Component, Reflect)]
 #[component(storage = "SparseSet")]
 pub struct AnimGraphInit {
-    gltf_handle: Handle<Gltf>
+    pub gltf_handle: Handle<Gltf>
 }
 
 #[derive(Debug, Hash, PartialEq, Eq, Clone, SystemSet)]
