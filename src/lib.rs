@@ -35,6 +35,7 @@ impl Plugin for PGAnimsPlugin {
         .register_type::<Anim>()
         .register_type::<AnimsConf>()
         .register_type::<PGAnimatable>()
+        .register_type::<AnimGraphInit>()
         .insert_resource(AnimsPluginConfig {
             anims_with_start_event: self.anims_with_start_event.clone(),
             anims_with_end_event:   self.anims_with_end_event.clone(),
@@ -43,7 +44,8 @@ impl Plugin for PGAnimsPlugin {
         .add_event::<AnimStartEvent>()
         .add_event::<AnimEndEvent>()
         .add_systems(Update, (
-            (
+            (   
+                init_graphs.run_if(any_with_component::<AnimGraphInit>),
                 attach_animation_graphs, 
                 update_animatable
             ).before(animate_targets),
@@ -54,6 +56,43 @@ impl Plugin for PGAnimsPlugin {
         // .add_observer(anim_end)
         ;
     }
+}
+
+fn init_graphs(
+    mut commands:   Commands,
+    gltf_ass:       Res<Assets<Gltf>>,
+    mut graphs:     ResMut<Assets<AnimationGraph>>,
+    query:          Query<(Entity, &AnimGraphInit)>
+){
+    for (entity, anim_graph_init) in query.iter(){
+        if let Some(gltf) = gltf_ass.get(&anim_graph_init.gltf_handle) {
+
+            let anim_clips: Vec<Handle<AnimationClip>> = gltf.animations.iter().map(|a| a.clone()).collect::<Vec<_>>();
+            let (graph, mut animations) = AnimationGraph::from_clips(anim_clips);
+            // INSERT HERE SO INDEX MATCHES THE VALUE;
+            animations.insert(0, graph.root);
+            let player_graph = PGAnimGraph{
+                graph: graphs.add(graph),
+                animations
+            };
+            info!(" [PGAnims] PGAnimGraph ready for {:?}", anim_graph_init.gltf_handle);
+            commands.insert_resource(player_graph);
+            commands.entity(entity).despawn();
+
+        } else {
+            info!(" [PGAnims] No GLTF for {:?}", anim_graph_init.gltf_handle);
+        }
+
+
+    }
+
+}
+
+
+#[derive(Component, Reflect)]
+#[component(storage = "SparseSet")]
+pub struct AnimGraphInit {
+    gltf_handle: Handle<Gltf>
 }
 
 #[derive(Debug, Hash, PartialEq, Eq, Clone, SystemSet)]
@@ -402,6 +441,7 @@ pub mod prelude {
         PGAnimsPlugin, 
         PGAnimsSet,
         PGAnimGraph,
+        AnimGraphInit,
         AnimStartEvent, 
         AnimEndEvent,
         PGAnimatable,
