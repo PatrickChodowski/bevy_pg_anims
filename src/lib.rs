@@ -127,7 +127,7 @@ fn attach_animation_graphs(
             for anim in anims_config.anims_with_start_event.iter(){
                 let anim_clip = get_clip(player_graph.animations[*anim], graph, &mut clips);
                 info!(" [PG ANIMS] Attaching Anim Start Event to {}", anim);
-                anim_clip.add_event(anim_clip.duration(), AnimStartEvent{
+                anim_clip.add_event(0.0, AnimStartEvent{
                     anim: *anim, 
                     armature_entity: armature_entity
                 });
