@@ -320,6 +320,9 @@ impl AnimsConf {
     pub fn new_with_mask(index: usize, mask: u32) -> Self {
         return AnimsConf{index, mask: Some(mask), ..default()};
     }
+    pub fn new_with_speed(index: usize, speed: f32) -> Self {
+        return AnimsConf{index, speed: Some(speed), ..default()};
+    }
 }
 
 pub type Anims = Vec<AnimsConf>;
