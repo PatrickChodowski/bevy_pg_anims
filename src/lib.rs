@@ -128,8 +128,7 @@ fn attach_animation_graphs(
                 let anim_clip = get_clip(player_graph.animations[*anim], graph, &mut clips);
                 info!(" [PG ANIMS] Attaching Anim Start Event to {}", anim);
                 anim_clip.add_event(0.0, AnimStartEvent{
-                    anim: *anim, 
-                    armature_entity: armature_entity
+                    anim: *anim
                 });
             }
 
@@ -137,8 +136,7 @@ fn attach_animation_graphs(
                 let anim_clip = get_clip(player_graph.animations[*anim], graph, &mut clips);
                 info!(" [PG ANIMS] Attaching Anim End Event to {}", anim);
                 anim_clip.add_event(anim_clip.duration(), AnimEndEvent{
-                    anim: *anim, 
-                    armature_entity: armature_entity
+                    anim: *anim
                 });
             }
 
@@ -280,14 +278,12 @@ pub struct PGAnimGraph {
 
 #[derive(Event, Clone)]
 pub struct AnimStartEvent {
-    pub anim: usize,
-    pub armature_entity: Entity
+    pub anim: usize
 }
 
 #[derive(Event, Clone)]
 pub struct AnimEndEvent {
-    pub anim: usize,
-    pub armature_entity: Entity
+    pub anim: usize
 }
 
 #[derive(Component, Reflect, Debug)]
