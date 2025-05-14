@@ -126,6 +126,7 @@ fn attach_animation_graphs(
             // Events
             for anim in anims_config.anims_with_start_event.iter(){
                 let anim_clip = get_clip(player_graph.animations[*anim], graph, &mut clips);
+                info!(" [PG ANIMS] Attacking Anim Start Event to {}", anim);
                 anim_clip.add_event(anim_clip.duration(), AnimStartEvent{
                     anim: *anim, 
                     armature_entity: armature_entity
@@ -134,6 +135,7 @@ fn attach_animation_graphs(
 
             for anim in anims_config.anims_with_end_event.iter(){
                 let anim_clip = get_clip(player_graph.animations[*anim], graph, &mut clips);
+                info!(" [PG ANIMS] Attacking Anim End Event to {}", anim);
                 anim_clip.add_event(anim_clip.duration(), AnimEndEvent{
                     anim: *anim, 
                     armature_entity: armature_entity
