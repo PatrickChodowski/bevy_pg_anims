@@ -391,6 +391,17 @@ impl Anim {
         }
     }
 
+    pub fn set_speed(&mut self, anim_id: usize, speed: f32){
+        for anim in self.anims.iter_mut(){
+            if anim.index == anim_id {
+                anim.speed = Some(speed);
+                break;
+            }
+        }
+    }
+
+
+
     // pub fn set_mask(&mut self, mask: u32){
     //     for anim in self.anims.iter_mut(){
     //         anim.mask = Some(mask);
