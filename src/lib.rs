@@ -46,7 +46,7 @@ impl Plugin for PGAnimsPlugin {
         .add_systems(Update, init_graphs.run_if(any_with_component::<AnimGraphInit>))
         .add_systems(Update, (
             (   
-                attach_animation_graphs, 
+                attach_animation_graphs.run_if(resource_exists::<PGAnimGraph>), 
                 update_animatable
             ).before(animate_targets),
             update_animation.run_if(resource_exists::<PGAnimGraph>)
