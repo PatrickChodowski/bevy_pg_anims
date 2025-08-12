@@ -385,11 +385,11 @@ impl Anim {
         self.anims.clear();
     }
     
-    // pub fn set_all_speed(&mut self, speed: f32){
-    //     for anim in self.anims.iter_mut(){
-    //         anim.speed = Some(speed);
-    //     }
-    // }
+    pub fn set_all_speed(&mut self, speed: f32){
+        for anim in self.anims.iter_mut(){
+            anim.speed = Some(speed);
+        }
+    }
 
     // pub fn set_mask(&mut self, mask: u32){
     //     for anim in self.anims.iter_mut(){
