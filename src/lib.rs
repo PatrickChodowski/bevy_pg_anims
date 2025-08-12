@@ -49,7 +49,7 @@ impl Plugin for PGAnimsPlugin {
                 attach_animation_graphs, 
                 update_animatable
             ).before(animate_targets),
-            update_animation
+            update_animation.run_if(resource_exists::<PGAnimGraph>)
         ).in_set(PGAnimsSet::Anims))
         .add_systems(PostUpdate, play_next_animation_after_finished)
         ;
