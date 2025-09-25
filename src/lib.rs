@@ -180,7 +180,7 @@ fn update_animatable(
 
 }
 
-fn get_clip<'a>(
+pub fn get_clip<'a>(
     node: AnimationNodeIndex,
     graph: &AnimationGraph,
     clips: &'a mut Assets<AnimationClip>,
@@ -427,6 +427,7 @@ impl Default for Anim {
 
 pub mod prelude {
     pub use crate::{
+        get_clip,
         PGAnimsPlugin, 
         PGAnimsSet,
         PGAnimGraph,
