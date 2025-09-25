@@ -109,3 +109,43 @@ fn anim_end(
 
 
 ```
+
+
+
+## Attach event later to clip
+
+
+``` 
+#[derive(Resource)]
+struct RunOnce(bool);
+
+impl Default for RunOnce {
+    fn default() -> Self {
+        RunOnce(false)
+    }
+}
+
+
+
+fn attach_events_to_clips(
+    player_graph:       Option<Res<PGAnimGraph>>,
+    mut graphs:         ResMut<Assets<AnimationGraph>>,
+    mut clips:          ResMut<Assets<AnimationClip>>,
+    mut run_once:       Local<RunOnce>
+){
+    if run_once.0 {
+        return;
+    }
+
+    if let Some(player_graph) = player_graph {
+        if let Some(graph) = graphs.get_mut(&player_graph.graph){
+            let anim_clip = get_clip(player_graph.animations[ANIM::Walking.get()], graph, &mut clips);
+            info!(" [ANIMS] Attaching WalkEvent Event to AnimWalking duration: {}", anim_clip.duration());
+            anim_clip.add_event(0.02, StepEvent);
+            anim_clip.add_event(0.4, StepEvent);
+            run_once.0 = true;
+        }
+    }
+}
+
+```
