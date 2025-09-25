@@ -66,6 +66,11 @@ fn init_graphs(
         if let Some(gltf) = gltf_ass.get(&anim_graph_init.gltf_handle) {
 
             let anim_clips: Vec<Handle<AnimationClip>> = gltf.animations.iter().map(|a| a.clone()).collect::<Vec<_>>();
+
+            for anim_clip in anim_clips.iter(){
+                info!(" [PGAnims] AnimClip: {:?}", anim_clip);
+            }
+
             let (graph, mut animations) = AnimationGraph::from_clips(anim_clips);
             // INSERT HERE SO INDEX MATCHES THE VALUE;
             animations.insert(0, graph.root);
