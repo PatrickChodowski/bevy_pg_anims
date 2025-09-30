@@ -707,7 +707,7 @@ dependencies = [
 
 [[package]]
 name = "bevy_pg_anims"
-version = "1.0.16"
+version = "1.16.1"
 dependencies = [
  "bevy",
 ]

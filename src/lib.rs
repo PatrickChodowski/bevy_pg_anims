@@ -68,6 +68,7 @@ fn init_graphs(
             let anim_clips: Vec<Handle<AnimationClip>> = gltf.animations.iter().map(|a| a.clone()).collect::<Vec<_>>();
 
             for anim_clip in anim_clips.iter(){
+                #[cfg(feature="verbose")]
                 info!(" [PGAnims] AnimClip: {:?}", anim_clip);
             }
 
@@ -78,6 +79,7 @@ fn init_graphs(
                 graph: graphs.add(graph),
                 animations
             };
+            #[cfg(feature="verbose")]
             info!(" [PGAnims] PGAnimGraph ready for {:?}", anim_graph_init.gltf_handle);
             commands.insert_resource(player_graph);
             commands.entity(entity).despawn();
@@ -131,6 +133,7 @@ fn attach_animation_graphs(
             // Events
             for anim in anims_config.anims_with_start_event.iter(){
                 let anim_clip = get_clip(player_graph.animations[*anim], graph, &mut clips);
+                #[cfg(feature="verbose")]
                 info!(" [PG ANIMS] Attaching Anim Start Event to {}", anim);
                 anim_clip.add_event(0.0, AnimStartEvent{
                     anim: *anim
@@ -139,6 +142,7 @@ fn attach_animation_graphs(
 
             for anim in anims_config.anims_with_end_event.iter(){
                 let anim_clip = get_clip(player_graph.animations[*anim], graph, &mut clips);
+                #[cfg(feature="verbose")]
                 info!(" [PG ANIMS] Attaching Anim End Event to {}", anim);
                 anim_clip.add_event(anim_clip.duration(), AnimEndEvent{
                     anim: *anim
