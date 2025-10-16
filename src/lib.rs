@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use bevy::platform::collections::HashSet;
-use bevy::animation::{animate_targets, AnimationTargetId};
+use bevy::animation::{animate_targets, AnimationTargetId, AnimationEvent};
 
 
 pub struct PGAnimsPlugin {
@@ -41,8 +41,6 @@ impl Plugin for PGAnimsPlugin {
             anims_with_end_event:   self.anims_with_end_event.clone(),
             targets_masks_mapping:  self.targets_masks_mapping.clone()
         })
-        .add_event::<AnimStartEvent>()
-        .add_event::<AnimEndEvent>()
         .add_systems(Update, init_graphs.run_if(any_with_component::<AnimGraphInit>))
         .add_systems(Update, (
             (   
@@ -285,12 +283,12 @@ pub struct PGAnimGraph {
     pub graph:      Handle<AnimationGraph>,
 }
 
-#[derive(Event, Clone)]
+#[derive(AnimationEvent, Clone)]
 pub struct AnimStartEvent {
     pub anim: usize
 }
 
-#[derive(Event, Clone)]
+#[derive(AnimationEvent, Clone)]
 pub struct AnimEndEvent {
     pub anim: usize
 }
